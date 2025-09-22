@@ -8,6 +8,7 @@ A bold, dark-themed React app with Supabase integration for:
 
 Environment:
 - Set REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_KEY in .env
+- Optional: REACT_APP_SITE_URL to control redirect base (defaults to window.location.origin)
 
 Run:
 - npm install

@@ -11,6 +11,7 @@ This React app implements a smart expense tracker with:
 Environment variables (must be set in .env):
 - REACT_APP_SUPABASE_URL
 - REACT_APP_SUPABASE_KEY
+- Optional: REACT_APP_SITE_URL (used for auth redirect base; otherwise window.location.origin)
 
 Project structure:
 - src/services: supabase client and domain services

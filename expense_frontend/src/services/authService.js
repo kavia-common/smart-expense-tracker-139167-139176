@@ -1,12 +1,14 @@
 import supabase from './supabaseClient';
+import { getURL } from '../utils/getURL';
 
 // PUBLIC_INTERFACE
 export async function signInWithMagicLink(email, redirectTo) {
   /** Sign in with magic email link using Supabase Auth */
+  const finalRedirect = redirectTo || `${getURL()}auth/callback`;
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: redirectTo
+      emailRedirectTo: finalRedirect
     }
   });
   if (error) throw error;

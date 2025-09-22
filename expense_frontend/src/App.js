@@ -53,6 +53,7 @@ function AppShell() {
             <Route path="/categories" element={<Categories />} />
             <Route path="/insights" element={<Insights />} />
             <Route path="/receipts" element={<Receipts />} />
+            <Route path="/auth/callback" element={<div className="card">Redirecting…</div>} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </div>
