@@ -1,49 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import './styles/theme.css';
+import './styles/layout.css';
+import './styles/receipts.css';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Sidebar from './components/layout/Sidebar';
+import Header from './components/layout/Header';
+import Dashboard from './pages/Dashboard';
+import Expenses from './pages/Expenses';
+import Categories from './pages/Categories';
+import Insights from './pages/Insights';
+import Receipts from './pages/Receipts';
+import AuthPage from './pages/AuthPage';
 
 // PUBLIC_INTERFACE
-function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
+export default function App() {
+  /** Root App with providers and routing */
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <AppShell />
+    </AuthProvider>
   );
 }
 
-export default App;
+function AppShell() {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="screen-center">
+        <div className="spinner" />
+        <p className="muted">Loading...</p>
+      </div>
+    );
+  }
+
+  // If not authenticated show Auth page
+  if (!session) {
+    return <AuthPage />;
+  }
+
+  return (
+    <div className="app-root ocean-pro">
+      <Sidebar />
+      <main className="main-area">
+        <Header />
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/expenses" element={<Expenses />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/receipts" element={<Receipts />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </main>
+    </div>
+  );
+}
